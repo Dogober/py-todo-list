@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django import forms
+from django.core.exceptions import ValidationError
 
 from todo.models import Tag, Task
 
@@ -16,6 +19,12 @@ class TaskForm(forms.ModelForm):
             }
         )
     )
+
+    def clean_deadline(self):
+        current_time = datetime.now()
+        if self.cleaned_data["deadline"] < current_time.date():
+            raise ValidationError("Deadline should be in the future")
+        return self.cleaned_data["deadline"]
 
     class Meta:
         model = Task
