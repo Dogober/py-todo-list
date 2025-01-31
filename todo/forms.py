@@ -1,5 +1,4 @@
-from datetime import datetime
-
+from django.utils import timezone
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -11,18 +10,19 @@ class TaskForm(forms.ModelForm):
         queryset=Tag.objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
-    deadline = forms.DateField(
-        widget=forms.DateInput(
+    deadline = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(
             attrs={
-                "type": "date",
+                "type": "datetime-local",
                 "class": "form-control",
             }
         )
     )
 
     def clean_deadline(self):
-        current_time = datetime.now()
-        if self.cleaned_data["deadline"] < current_time.date():
+        current_time = timezone.now()
+        if self.cleaned_data["deadline"] and self.cleaned_data["deadline"] < current_time:
             raise ValidationError("Deadline should be in the future")
         return self.cleaned_data["deadline"]
 
