@@ -38,7 +38,12 @@
             </a>
         {% endif %}
       </div>
-      <p>{{ task.created_at }}</p>
+      <p>
+        {{ task.created_at }}
+        {% if task.deadline %}
+          <time class="text-danger">Deadline: {{ task.deadline }}</time>
+        {% endif %}
+      </p>
       <p class="text-secondary">
         Tags: {{ task.tags.all|join:", "}} |
         <a href="{% url 'todo:task-update' task.id %}" class="text-primary">Update</a>
