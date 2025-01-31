@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="d-flex justify-content-between mb-5">
+    <h1>
+      TODO list
+    </h1>
+    <a
+        href="{% url 'todo:task-create' %}"
+        class="btn btn-primary align-self-center"
+    >
+      Create
+    </a>
+  </div>
+  {% if task_list %}
+    {% for task in task_list %}
+      <div class="d-flex justify-content-between mb-2">
+        <h5>
+          {{ task.content }}
+          {% if task.is_done %}
+            <strong class="text-success">Done</strong>
+            {% else %}
+              <strong class="text-danger">Not Done</strong>
+          {% endif %}
+        </h5>
+        {% if task.is_done %}
+          <a
+              href="{% url 'todo:task-manager' task.id %}"
+              class="btn btn-secondary"
+          >
+            Undo
+          </a>
+          {% else %}
+            <a
+              href="{% url 'todo:task-manager' task.id %}"
+              class="btn btn-success"
+            >
+              Complete
+            </a>
+        {% endif %}
+      </div>
+      <p>{{ task.created_at }}</p>
+      <p class="text-secondary">
+        Tags: {{ task.tags.all|join:", "}} |
+        <a href="{% url 'todo:task-update' task.id %}" class="text-primary">Update</a>
+        <a href="{% url 'todo:task-delete' task.id %}" class="text-primary">Delete</a>
+      </p>
+      {% if forloop.counter < task_list|length %}
+        <hr>
+      {% endif %}
+    {% endfor %}
+    {% else %}
+      At this moment you have not got any task ^_^
+  {% endif %}
+{% endblock %}
