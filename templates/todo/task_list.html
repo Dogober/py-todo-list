@@ -39,9 +39,9 @@
         {% endif %}
       </div>
       <p>
-        {{ task.created_at }}
+        <strong>created at:</strong> {{ task.created_at }}
         {% if task.deadline %}
-          <time class="text-danger">Deadline: {{ task.deadline }}</time>
+          <time class="text-danger"><strong>Deadline</strong>: {{ task.deadline }}</time>
         {% endif %}
       </p>
       <p class="text-secondary">
